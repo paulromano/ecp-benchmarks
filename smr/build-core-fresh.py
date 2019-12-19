@@ -44,7 +44,10 @@ else:
     directory = args.output_dir
 directory.mkdir(exist_ok=True)
 
-ring_radii = np.sqrt(np.arange(1, args.rings)*pellet_OR**2 / args.rings)
+if args.rings > 1:
+    ring_radii = np.sqrt(np.arange(1, args.rings)*pellet_OR**2 / args.rings)
+else:
+    ring_radii = None
 geometry = core_geometry(ring_radii, args.axial, args.depleted)
 
 h = active_fuel_length / args.axial
