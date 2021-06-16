@@ -142,13 +142,14 @@ def make_pin_stack(name, zsurfaces, universes, boundary, fuel_fill):
     return universe
 
 
-def pin_universes(num_rings=10, num_axial=196, depleted=False):
+def pin_universes(ring_radii=None, num_axial=196, depleted=False):
     """Generate universes for SMR fuel pins.
 
     Parameters
     ----------
-    num_rings : int
-        Number of annual regions in fuel
+    ring_radii : iterable of float
+        Radii of rings in fuel (note that this doesn't need to include the
+        full fuel pin radius)
     num_axial : int
         Number of axial subdivisions in fuel
     depleted : bool
@@ -230,8 +231,8 @@ def pin_universes(num_rings=10, num_axial=196, depleted=False):
         surfs['top upper nozzle']
     ]
 
-    univs['GT empty'] = make_stack(
-        'GT empty', surfaces=stack_surfs,
+    univs['GT empty stack'] = make_stack(
+        'GT empty stack', surfaces=stack_surfs,
         universes=[univs['water pin'],
                    univs['water pin'],
                    univs['water pin'],
@@ -472,199 +473,6 @@ def pin_universes(num_rings=10, num_axial=196, depleted=False):
                        univs['GT CR bank {} dummy bare'.format(b)]])
 
 
-    #### BURNABLE ABSORBER PIN CELLS
-
-    univs['BA'] = make_pin(
-        'BA',
-        surfaces=[surfs['BA IR 1'],
-                  surfs['BA IR 2'],
-                  surfs['BA IR 3'],
-                  surfs['BA IR 4'],
-                  surfs['BA IR 5'],
-                  surfs['BA IR 6'],
-                  surfs['BA IR 7'],
-                  surfs['BA IR 8']],
-        materials=[mats['Air'],
-                   mats['SS'],
-                   mats['Air'],
-                   mats['BSG'],
-                   mats['Air'],
-                   mats['SS'],
-                   mats['H2O'],
-                   mats['Zr'],
-                   mats['H2O']])
-
-    univs['BA grid (bottom)'] = make_pin(
-        'BA grid (bottom)',
-        surfaces=[surfs['BA IR 1'],
-                  surfs['BA IR 2'],
-                  surfs['BA IR 3'],
-                  surfs['BA IR 4'],
-                  surfs['BA IR 5'],
-                  surfs['BA IR 6'],
-                  surfs['BA IR 7'],
-                  surfs['BA IR 8']],
-        materials=[mats['Air'],
-                   mats['SS'],
-                   mats['Air'],
-                   mats['BSG'],
-                   mats['Air'],
-                   mats['SS'],
-                   mats['H2O'],
-                   mats['Zr'],
-                   mats['H2O']],
-        grid='bottom')
-
-    univs['BA grid (intermediate)'] = make_pin(
-        'BA grid (intermediate)',
-        surfaces=[surfs['BA IR 1'],
-                  surfs['BA IR 2'],
-                  surfs['BA IR 3'],
-                  surfs['BA IR 4'],
-                  surfs['BA IR 5'],
-                  surfs['BA IR 6'],
-                  surfs['BA IR 7'],
-                  surfs['BA IR 8']],
-        materials=[mats['Air'],
-                   mats['SS'],
-                   mats['Air'],
-                   mats['BSG'],
-                   mats['Air'],
-                   mats['SS'],
-                   mats['H2O'],
-                   mats['Zr'],
-                   mats['H2O']],
-        grid='intermediate')
-
-    univs['BA dashpot'] = make_pin(
-        'BA dashpot',
-        surfaces=[surfs['BA IR 1'],
-                  surfs['BA IR 2'],
-                  surfs['BA IR 3'],
-                  surfs['BA IR 4'],
-                  surfs['BA IR 5'],
-                  surfs['BA IR 6'],
-                  surfs['GT dashpot IR'],
-                  surfs['GT dashpot OR']],
-        materials=[mats['Air'],
-                   mats['SS'],
-                   mats['Air'],
-                   mats['BSG'],
-                   mats['Air'],
-                   mats['SS'],
-                   mats['H2O'],
-                   mats['Zr'],
-                   mats['H2O']])
-
-    univs['BA dashpot grid (bottom)'] = make_pin(
-        'BA dashpot grid (bottom)',
-        surfaces=[surfs['BA IR 1'],
-                  surfs['BA IR 2'],
-                  surfs['BA IR 3'],
-                  surfs['BA IR 4'],
-                  surfs['BA IR 5'],
-                  surfs['BA IR 6'],
-                  surfs['GT dashpot IR'],
-                  surfs['GT dashpot OR']],
-        materials=[mats['Air'],
-                   mats['SS'],
-                   mats['Air'],
-                   mats['BSG'],
-                   mats['Air'],
-                   mats['SS'],
-                   mats['H2O'],
-                   mats['Zr'],
-                   mats['H2O']],
-        grid='bottom')
-
-    univs['BA dashpot grid (intermediate)'] = make_pin(
-        'BA dashpot grid (intermediate)',
-        surfaces=[surfs['BA IR 1'],
-                  surfs['BA IR 2'],
-                  surfs['BA IR 3'],
-                  surfs['BA IR 4'],
-                  surfs['BA IR 5'],
-                  surfs['BA IR 6'],
-                  surfs['GT dashpot IR'],
-                  surfs['GT dashpot OR']],
-        materials=[mats['Air'],
-                   mats['SS'],
-                   mats['Air'],
-                   mats['BSG'],
-                   mats['Air'],
-                   mats['SS'],
-                   mats['H2O'],
-                   mats['Zr'],
-                   mats['H2O']],
-        grid='intermediate')
-
-    univs['BA blank SS'] = make_pin(
-        'BA blank SS',
-        surfaces=[surfs['BA IR 6'],
-                  surfs['BA IR 7'],
-                  surfs['BA IR 8']],
-        materials=[mats['SS'],
-                   mats['H2O'],
-                   mats['Zr'],
-                   mats['H2O']])
-
-    univs['BA blank SS bare'] = make_pin(
-        'BA blank SS bare',
-        surfaces=[surfs['BA IR 6']],
-        materials=[mats['SS'],
-                   mats['H2O']])
-
-    stack_surfs_BA = [
-        surfs['bot support plate'],
-        surfs['top support plate'],
-        surfs['top lower nozzle'],
-        surfs['top lower thimble'],
-        surfs['grid1bot'],
-        surfs['BA bot'],
-        surfs['grid1top'],
-        surfs['dashpot top'],
-        surfs['grid2bot'],
-        surfs['grid2top'],
-        surfs['grid3bot'],
-        surfs['grid3top'],
-        surfs['grid4bot'],
-        surfs['grid4top'],
-        surfs['top active core'],
-        surfs['grid5bot'],
-        surfs['grid5top'],
-        surfs['top pin plenum'],
-        surfs['top FR'],
-        surfs['bot upper nozzle'],
-        surfs['top upper nozzle']]
-
-    # Stack all axial pieces of control rod tubes together for each bank
-
-    univs['BA stack'] = make_stack(
-        'BA stack', stack_surfs_BA,
-        universes=[univs['water pin'],
-                   univs['water pin'],
-                   univs['water pin'],
-                   univs['GTd empty'],
-                   univs['GTd empty'],
-                   univs['GTd empty grid (bottom)'],
-                   univs['BA dashpot grid (bottom)'],
-                   univs['BA dashpot'],
-                   univs['BA'],
-                   univs['BA grid (intermediate)'],
-                   univs['BA'],
-                   univs['BA grid (intermediate)'],
-                   univs['BA'],
-                   univs['BA grid (intermediate)'],
-                   univs['BA'],
-                   univs['BA blank SS'],
-                   univs['BA blank SS'],
-                   univs['BA blank SS'],
-                   univs['BA blank SS'],
-                   univs['BA blank SS'],
-                   univs['BA blank SS bare'],
-                   univs['water pin']])
-
-
     # Fuel pin cells
     univs['SS pin'] = make_pin(
         'SS pin',
@@ -706,12 +514,11 @@ def pin_universes(num_rings=10, num_axial=196, depleted=False):
         axial_splits = np.linspace(bottom_fuel_stack, top_active_core, num_axial + 1)[1:-1]
         axial_surfs = [openmc.ZPlane(z0=z) for z in axial_splits]
 
-    if num_rings > 1:
+    if ring_radii is not None:
         # Get z-cylinder surfaces for each ring
         rings = []
-        for i in range(1, num_rings):
-            R = sqrt(i*pellet_OR**2/num_rings)
-            cyl = openmc.ZCylinder(r=R, name='fuel ring {}'.format(i))
+        for i, r in enumerate(ring_radii):
+            cyl = openmc.ZCylinder(r=r, name='fuel ring {}'.format(i))
             rings.append(cyl)
 
     def subdivided_fuel(fill):
@@ -719,14 +526,14 @@ def pin_universes(num_rings=10, num_axial=196, depleted=False):
         uo2_cells = []
         if num_axial > 1:
             for axial_region in subdivide(axial_surfs):
-                if num_rings > 1:
+                if ring_radii is not None:
                     for ring_region in subdivide(rings):
                         cell = openmc.Cell(fill=fill, region=axial_region & ring_region)
                         uo2_cells.append(cell)
                 else:
                     uo2_cells.append(openmc.Cell(fill=fill, region=axial_region))
         else:
-            if num_rings > 1:
+            if ring_radii is not None:
                 for ring_region in subdivide(rings):
                     cell = openmc.Cell(fill=fill, region=ring_region)
                     uo2_cells.append(cell)
@@ -737,7 +544,7 @@ def pin_universes(num_rings=10, num_axial=196, depleted=False):
 
     # If rings/axial segments are present, create a universe for the subdivided
     # fuel. Otherwise just use a plain material.
-    if num_rings > 1 or num_axial > 1:
+    if ring_radii is not None or num_axial > 1:
         fuel_fill = subdivided_fuel(mats['UO2 1.6 {}'.format(fuel)])
     else:
         fuel_fill = mats['UO2 1.6 {}'.format(fuel)]
@@ -761,6 +568,12 @@ def pin_universes(num_rings=10, num_axial=196, depleted=False):
         surfaces=outside_pin_surfaces,
         materials=outside_pin_mats,
         grid='intermediate')
+
+    univs['Fuel pin (1.6%) no grid'] = make_pin(
+        'Pin no grid',
+        surfaces=[surfs['pellet OR']] + outside_pin_surfaces,
+        materials=[fuel_fill] + outside_pin_mats
+    )
 
     # Stack all axial pieces of 1.6% enriched fuel pin cell
 
@@ -829,10 +642,16 @@ def pin_universes(num_rings=10, num_axial=196, depleted=False):
 
     # If rings/axial segments are present, create a universe for the subdivided
     # fuel. Otherwise just use a plain material.
-    if num_rings > 1 or num_axial > 1:
+    if ring_radii is not None or num_axial > 1:
         fuel_fill = subdivided_fuel(mats['UO2 2.4 {}'.format(fuel)])
     else:
         fuel_fill = mats['UO2 2.4 {}'.format(fuel)]
+
+    univs['Fuel pin (2.4%) no grid'] = make_pin(
+        'Pin no grid',
+        surfaces=[surfs['pellet OR']] + outside_pin_surfaces,
+        materials=[fuel_fill] + outside_pin_mats
+    )
 
     # Stack all axial pieces of 2.4% enriched fuel pin cell
 
@@ -875,10 +694,25 @@ def pin_universes(num_rings=10, num_axial=196, depleted=False):
 
     # If rings/axial segments are present, create a universe for the subdivided
     # fuel. Otherwise just use a plain material.
-    if num_rings > 1 or num_axial > 1:
+    if ring_radii is not None or num_axial > 1:
         fuel_fill = subdivided_fuel(mats['UO2 3.1 {}'.format(fuel)])
     else:
         fuel_fill = mats['UO2 3.1 {}'.format(fuel)]
+
+    if num_axial > 1:
+        water_cells = []
+        for i, r in enumerate(subdivide(axial_surfs)):
+            cell = openmc.Cell(fill=mats['H2O'], region=r, name=f'Water ({i})')
+            water_cells.append(cell)
+        water_fill = openmc.Universe(cells=water_cells)
+    else:
+        water_fill = mats['H2O']
+
+    univs['Fuel pin (3.1%) no grid'] = make_pin(
+        'Pin no grid',
+        surfaces=[surfs['pellet OR']] + outside_pin_surfaces,
+        materials=[fuel_fill, mats['He'], mats['M5'], water_fill]
+    )
 
     # Stack all axial pieces of 3.1% enriched fuel pin cell
 
